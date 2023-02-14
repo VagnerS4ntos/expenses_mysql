@@ -7,13 +7,21 @@ export default async function handler(
 ) {
 	try {
 		const { id, email } = req.body;
-		await Users.update(
-			{ email },
-			{
-				where: { id },
-			},
-		);
-		res.status(200).json({ message: 'Email successfully changed' });
+		const checkedEmail = await Users.findOne({
+			where: { email: email.toLowerCase() },
+			raw: true,
+		});
+		if (checkedEmail) {
+			res.json({ message: 'Email already in use', error: true });
+		} else {
+			await Users.update(
+				{ email },
+				{
+					where: { id },
+				},
+			);
+			res.json({ message: 'Email successfully changed', error: false });
+		}
 	} catch (error) {
 		res.status(400).json(error);
 	}

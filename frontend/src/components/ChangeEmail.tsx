@@ -19,15 +19,16 @@ function ChangeEmail({ userId }: { userId: string }) {
 
 	const changeEmail: SubmitHandler<IEmail> = async (userData) => {
 		try {
-			const response = await axiosInstance.post('user/change_email', {
-				email: userData['E-mail'].trim(),
-				id: userId,
-			});
-			if (response.status == 200) {
-				toast.success(response.data.message);
-				setValue('E-mail', '');
+			const { data }: { data: { message: string; error: boolean } } =
+				await axiosInstance.post('user/change_email', {
+					email: userData['E-mail'].trim(),
+					id: userId,
+				});
+			if (data.error) {
+				toast.error(data.message);
 			} else {
-				toast.error(response.data.message);
+				toast.success('E-mail successfully changed!');
+				setValue('E-mail', '');
 			}
 		} catch (error: any) {
 			if (error instanceof Error) {

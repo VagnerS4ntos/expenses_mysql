@@ -16,7 +16,7 @@ export default async function handler(
 				path: '/',
 			}),
 		);
-		res.status(200).json({ message: 'Success' });
+		res.json({ message: 'Success', error: false });
 	} catch (error) {
 		res.status(400).json(error);
 	}

@@ -17,7 +17,7 @@ export default async function handler(
 				where: { email },
 			},
 		);
-		res.status(200).json({ message: 'Password successfully reseted' });
+		res.json({ message: 'Password successfully reseted', error: false });
 	} catch (error) {
 		res.status(400).json(error);
 	}

@@ -15,9 +15,10 @@ export default async function handler(
 			raw: true,
 		});
 		if (!checkIfUserExists) {
-			res
-				.status(404)
-				.json({ message: 'This email does not exist in our database' });
+			res.json({
+				message: 'This email does not exist in our database',
+				error: true,
+			});
 		} else {
 			const code = Math.floor(Math.random() * 9000) + 1000;
 
@@ -46,11 +47,12 @@ export default async function handler(
 
 			transporter.sendMail(message, (error: any) => {
 				if (error) {
-					res.status(400).json({ message: error });
+					res.json({ message: error, error: true });
 				} else {
-					res.status(200).json({
+					res.json({
 						message: 'Check your email inbox',
 						code,
+						error: false,
 					});
 				}
 			});

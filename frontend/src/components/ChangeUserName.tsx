@@ -21,16 +21,17 @@ function ChangeUsername({ userId }: { userId: string }) {
 
 	const changeName: SubmitHandler<IName> = async (userData) => {
 		try {
-			const response = await axiosInstance.post('user/change_name', {
-				name: userData.Name.trim(),
-				id: userId,
-			});
-			if (response.status == 200) {
-				toast.success('Username successfully changed!');
+			const { data }: { data: { message: string; error: boolean } } =
+				await axiosInstance.post('user/change_name', {
+					name: userData.Name.trim(),
+					id: userId,
+				});
+			if (data.error) {
+				toast.error(data.message);
+			} else {
+				toast.success(data.message);
 				setUserName(userData.Name);
 				setValue('Name', '');
-			} else {
-				toast.error(response.data.message);
 			}
 		} catch (error: any) {
 			if (error instanceof Error) {

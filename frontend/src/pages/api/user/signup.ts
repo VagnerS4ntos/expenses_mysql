@@ -18,7 +18,7 @@ export default async function handler(
 		});
 
 		if (checkedEmail) {
-			res.status(409).json({ message: 'E-mail already in use' });
+			res.json({ message: 'E-mail already in use', error: true });
 		} else {
 			const salt = bcrypt.genSaltSync(10);
 			const hashedPassword = bcrypt.hashSync(password, salt);
@@ -48,11 +48,12 @@ export default async function handler(
 					}),
 				);
 
-				res.status(200).json({
+				res.json({
 					message: 'Success',
+					error: false,
 				});
 			} else {
-				res.status(400).json({
+				res.json({
 					error: true,
 					message: 'Something is wrong',
 				});

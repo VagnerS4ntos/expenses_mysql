@@ -43,12 +43,12 @@ export default async function handler(
 					}),
 				);
 
-				res.status(200).json({ message: 'Success' });
+				res.json({ message: 'Success', error: false });
 			} else {
-				res.status(404).json({ error: true, message: 'Invalid Credentials' });
+				res.json({ message: 'Invalid Credentials', error: true });
 			}
 		} else {
-			res.status(404).json({ message: 'Invalid Credentials' });
+			res.json({ message: 'Invalid Credentials', error: true });
 		}
 	} catch (error) {
 		res.status(400).json(error);

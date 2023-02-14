@@ -53,8 +53,10 @@ export function filterExpenseByDate(
 
 export async function getUserExpenses(id: string, year: number, month: string) {
 	try {
-		const response = await axiosInstance.get(`expenses/getUserExpenses/${id}`);
-		const userData = response.data.sort(sortByName);
+		const { data }: { data: InterfaceExpense[] } = await axiosInstance.get(
+			`expenses/getUserExpenses/${id}`,
+		);
+		const userData = data.sort(sortByName);
 		const userExpensesByDate = filterExpenseByDate(userData, year, month);
 		return userExpensesByDate;
 	} catch (error: any) {

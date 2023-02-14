@@ -24,15 +24,14 @@ function ResetPassword() {
 			setVerificationCode(null);
 		} else {
 			try {
-				const response = await axiosInstance.post('user/reset_password', {
-					email: userEmail,
-					password: userData.Password,
-				});
-				if (response.status == 200) {
-					toast.success(response.data.message);
+				const { data }: { data: { message: string; error: boolean } } =
+					await axiosInstance.post('user/reset_password', {
+						email: userEmail,
+						password: userData.Password,
+					});
+				if (!data.error) {
+					toast.success(data.message);
 					router.push('/login');
-				} else {
-					toast.error(response.data.message);
 				}
 			} catch (error: any) {
 				if (error instanceof Error) {

@@ -12,7 +12,7 @@ export default async function handler(
 			where: { userId: id },
 			raw: true,
 		});
-		res.status(200).json(userExpenses);
+		res.json(userExpenses);
 	} catch (error) {
 		res.status(400).json(error);
 	}

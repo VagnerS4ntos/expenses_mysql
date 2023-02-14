@@ -15,8 +15,9 @@ function Header() {
 
 	async function signout() {
 		try {
-			const response = await axiosInstance.post('user/logout');
-			if (response.status == 200) router.push('/login');
+			const { data }: { data: { message: string; error: boolean } } =
+				await axiosInstance.post('user/logout');
+			if (!data.error) router.push('/login');
 		} catch (error: any) {
 			if (error instanceof Error) {
 				toast.error(error.message);
@@ -32,7 +33,7 @@ function Header() {
 				<Image src="/logo.png" alt="Logo" width={60} height={60} />
 			</Link>
 			<nav>
-				<ul className="flex gap-3">
+				<ul className="flex gap-3 pl-4">
 					<li>{userName}</li>
 					<li className="cursor-pointer">
 						<Link href="/settings">

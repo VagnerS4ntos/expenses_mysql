@@ -6,6 +6,7 @@ import { userNameState } from 'globalState/recoilState';
 import { useRecoilState } from 'recoil';
 import ChangeUsername from '@/components/ChangeUserName';
 import ChangeEmail from '@/components/ChangeEmail';
+import ChangePassword from '@/components/ChangeUserPassword';
 
 function settings({ id, name }: { id: string; name: string }) {
 	const [userName, setUserName] = useRecoilState(userNameState);
@@ -17,9 +18,10 @@ function settings({ id, name }: { id: string; name: string }) {
 	return (
 		<>
 			<Header />
-			<main className="max-w-xl mx-auto">
+			<main className="max-w-xl mx-auto px-4">
 				<ChangeUsername userId={id} />
 				<ChangeEmail userId={id} />
+				<ChangePassword userId={id} />
 			</main>
 		</>
 	);

@@ -13,7 +13,7 @@ export default async function handler(
 				where: { id },
 			},
 		);
-		res.status(200).json({ message: 'Success!' });
+		res.json({ message: 'Username successfully changed', error: false });
 	} catch (error) {
 		res.status(400).json(error);
 	}

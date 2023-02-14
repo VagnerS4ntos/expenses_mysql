@@ -58,16 +58,17 @@ function Signup() {
 		const id = uuid();
 		const { name, email, password } = userData;
 		try {
-			const response = await axiosInstance.post('user/signup', {
-				id,
-				name,
-				email,
-				password,
-			});
-			if (response.status == 200) {
-				router.push('/');
+			const { data }: { data: { message: string; error: boolean } } =
+				await axiosInstance.post('user/signup', {
+					id,
+					name,
+					email,
+					password,
+				});
+			if (data.error) {
+				toast.error(data.message);
 			} else {
-				toast.error(response.data.message);
+				router.push('/');
 			}
 		} catch (error: any) {
 			if (error instanceof Error) {

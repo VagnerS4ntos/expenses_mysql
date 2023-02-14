@@ -23,18 +23,18 @@ function RequestResetPassword() {
 		const toastLoading = toast.loading('Please wait...');
 		setRequesting(true);
 		try {
-			const response = await axiosInstance.post('user/reset_password_request', {
-				email: userData.email,
-			});
-			if (response.status == 200) {
-				setVerificationCode(response.data.code);
-				toast.update(
-					toastLoading,
-					updateToast(response.data.message, 'success'),
-				);
-				setUserEmail(userData.email);
+			const {
+				data,
+			}: { data: { message: string; code: number; error: boolean } } =
+				await axiosInstance.post('user/reset_password_request', {
+					email: userData.email,
+				});
+			if (data.error) {
+				toast.update(toastLoading, updateToast(data.message, 'error'));
 			} else {
-				toast.update(toastLoading, updateToast(response.data.message, 'error'));
+				setVerificationCode(data.code);
+				toast.update(toastLoading, updateToast(data.message, 'success'));
+				setUserEmail(userData.email);
 			}
 		} catch (error: any) {
 			if (error instanceof Error) {
