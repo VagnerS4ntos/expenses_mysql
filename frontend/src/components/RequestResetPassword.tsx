@@ -37,7 +37,11 @@ function RequestResetPassword() {
 				toast.update(toastLoading, updateToast(response.data.message, 'error'));
 			}
 		} catch (error: any) {
-			toast.update(toastLoading, updateToast(error, 'error'));
+			if (error instanceof Error) {
+				toast.update(toastLoading, updateToast(error.message, 'error'));
+			} else {
+				toast.update(toastLoading, updateToast(error, 'error'));
+			}
 		} finally {
 			setRequesting(false);
 		}

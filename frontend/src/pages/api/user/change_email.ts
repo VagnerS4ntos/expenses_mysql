@@ -6,14 +6,14 @@ export default async function handler(
 	res: NextApiResponse,
 ) {
 	try {
-		const { id, name } = req.body;
+		const { id, email } = req.body;
 		await Users.update(
-			{ name },
+			{ email },
 			{
 				where: { id },
 			},
 		);
-		res.status(200).json({ message: 'Success!' });
+		res.status(200).json({ message: 'Email successfully changed' });
 	} catch (error) {
 		res.status(400).json(error);
 	}

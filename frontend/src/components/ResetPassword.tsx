@@ -35,7 +35,11 @@ function ResetPassword() {
 					toast.error(response.data.message);
 				}
 			} catch (error: any) {
-				toast.error(error);
+				if (error instanceof Error) {
+					toast.error(error.message);
+				} else {
+					toast.error(error);
+				}
 			} finally {
 				setVerificationCode(null);
 				setUserEmail('');
