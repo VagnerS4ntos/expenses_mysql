@@ -1,4 +1,5 @@
 import { axiosInstance } from 'axios.config';
+import { TypeOptions, UpdateOptions } from 'react-toastify';
 
 export const months = [
 	'January',
@@ -51,18 +52,62 @@ export function filterExpenseByDate(
 	return expensesFiltered;
 }
 
-export async function getUserExpenses(id: string, year: number, month: string) {
+// export async function getExpenseByDate(
+// 	id: string,
+// 	year: number,
+// 	month: string,
+// ) {
+// 	try {
+// 		const { data }: { data: InterfaceExpense[] } = await axiosInstance.get(
+// 			`expenses/getUserExpenses/${id}`,
+// 		);
+// 		const userData = data.sort(sortByName);
+// 		const userExpensesByDate = filterExpenseByDate(userData, year, month);
+// 		return userExpensesByDate;
+// 	} catch (error: any) {
+// 		console.log(error?.message);
+// 		return [];
+// 	}
+// }
+
+export function getExpenseByDate(
+	userData: InterfaceExpense[],
+	year: number,
+	month: string,
+) {
 	try {
-		const { data }: { data: InterfaceExpense[] } = await axiosInstance.get(
-			`expenses/getUserExpenses/${id}`,
-		);
-		const userData = data.sort(sortByName);
 		const userExpensesByDate = filterExpenseByDate(userData, year, month);
 		return userExpensesByDate;
 	} catch (error: any) {
 		console.log(error?.message);
 		return [];
 	}
+}
+
+export async function getAllUserExpenses(id: string) {
+	try {
+		const { data }: { data: InterfaceExpense[] } = await axiosInstance.get(
+			`expenses/getUserExpenses/${id}`,
+		);
+		const userData = data.sort(sortByName);
+		return userData;
+	} catch (error: any) {
+		console.log(error?.message);
+		return [];
+	}
+}
+
+export function updateToast(
+	message: string,
+	type: TypeOptions,
+): UpdateOptions<unknown> {
+	return {
+		render: message,
+		type: type,
+		isLoading: false,
+		autoClose: 3000,
+		closeButton: true,
+	};
 }
 
 export interface InterfaceExpense {

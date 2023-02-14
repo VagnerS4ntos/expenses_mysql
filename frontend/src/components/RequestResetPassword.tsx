@@ -4,6 +4,7 @@ import { axiosInstance } from 'axios.config';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { code, email } from 'globalState/recoilState';
 import { useRecoilState } from 'recoil';
+import { updateToast } from 'helpers/utils';
 const emailRegex =
 	/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -69,16 +70,3 @@ function RequestResetPassword() {
 }
 
 export default RequestResetPassword;
-
-function updateToast(
-	message: string,
-	type: TypeOptions,
-): UpdateOptions<unknown> {
-	return {
-		render: message,
-		type: type,
-		isLoading: false,
-		autoClose: 3000,
-		closeButton: true,
-	};
-}

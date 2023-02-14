@@ -8,6 +8,7 @@ import { GetServerSidePropsContext } from 'next';
 import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
 import { axiosInstance } from 'axios.config';
 import { toast } from 'react-toastify';
+import { updateToast } from 'helpers/utils';
 
 interface IFormInput {
 	email: string;
@@ -48,6 +49,7 @@ function Login() {
 
 	const onSubmit: SubmitHandler<IFormInput> = async (loginData) => {
 		const { email, password } = loginData;
+		const toastLoading = toast.loading('Please wait...');
 		try {
 			const { data }: { data: { message: string; error: boolean } } =
 				await axiosInstance.post('user/login', {
@@ -55,15 +57,16 @@ function Login() {
 					password,
 				});
 			if (data.error) {
-				toast.error(data.message);
+				toast.update(toastLoading, updateToast(data.message, 'error'));
 			} else {
+				toast.dismiss(toastLoading);
 				router.push('/');
 			}
 		} catch (error: any) {
 			if (error instanceof Error) {
-				toast.error(error.message);
+				toast.update(toastLoading, updateToast(error.message, 'error'));
 			} else {
-				toast.error(error);
+				toast.update(toastLoading, updateToast(error, 'error'));
 			}
 		}
 	};

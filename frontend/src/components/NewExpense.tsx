@@ -6,8 +6,9 @@ import {
 	yearState,
 	monthState,
 	userExpensesData,
+	allExpenses,
 } from 'globalState/recoilState';
-import { getUserExpenses } from 'helpers/utils';
+import { getExpenseByDate, getAllUserExpenses } from 'helpers/utils';
 import { toast } from 'react-toastify';
 
 function NewExpense({ userId }: { userId: string }) {
@@ -15,6 +16,7 @@ function NewExpense({ userId }: { userId: string }) {
 	const year = useRecoilValue(yearState);
 	const month = useRecoilValue(monthState);
 	const [userExpenses, setUserExpenses] = useRecoilState(userExpensesData);
+	const [allUserExpenses, setAllUserExpenses] = useRecoilState(allExpenses);
 
 	const {
 		register,
@@ -38,9 +40,11 @@ function NewExpense({ userId }: { userId: string }) {
 				newExpenseData,
 			);
 			if (response.status == 200) {
-				getUserExpenses(userId, year, month).then((data) =>
-					setUserExpenses(data),
-				);
+				getAllUserExpenses(userId).then((response) => {
+					setAllUserExpenses(response);
+					const renderData = getExpenseByDate(response, year, month);
+					setUserExpenses(renderData);
+				});
 				toast.success(response.data.message);
 				setAddExpense(false);
 				reset();

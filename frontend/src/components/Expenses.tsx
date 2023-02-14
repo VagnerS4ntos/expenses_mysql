@@ -1,6 +1,7 @@
 import React from 'react';
 import {
-	getUserExpenses,
+	getExpenseByDate,
+	getAllUserExpenses,
 	getDayYearMonth,
 	InterfaceExpense,
 } from 'helpers/utils';
@@ -9,6 +10,7 @@ import {
 	yearState,
 	monthState,
 	userExpensesData,
+	allExpenses,
 	deletingExpense,
 	editingExpense,
 } from 'globalState/recoilState';
@@ -20,6 +22,7 @@ function Expenses({ userId }: { userId: string }) {
 	const year = useRecoilValue(yearState);
 	const month = useRecoilValue(monthState);
 	const [userExpenses, setUserExpenses] = useRecoilState(userExpensesData);
+	const [allUserExpenses, setAllUserExpenses] = useRecoilState(allExpenses);
 	const [loading, setLoading] = React.useState(true);
 	const [deleteExpenseWindow, setDeleteExpenseWindow] =
 		useRecoilState(deletingExpense);
@@ -28,12 +31,25 @@ function Expenses({ userId }: { userId: string }) {
 	const [deleteExpenseId, setDeleteExpenseId] = React.useState('');
 	const [editExpenseData, setEditExpenseData] =
 		React.useState<InterfaceExpense | null>(null);
+	const [firstRender, setFirstRender] = React.useState(true);
 
 	React.useEffect(() => {
-		getUserExpenses(userId, year, month)
-			.then((data) => setUserExpenses(data))
-			.then(() => setLoading(false));
+		if (!firstRender) {
+			const data = getExpenseByDate(allUserExpenses, year, month);
+			setUserExpenses(data);
+		}
+		setFirstRender(false);
 	}, [year, month]);
+
+	React.useEffect(() => {
+		getAllUserExpenses(userId)
+			.then((response) => {
+				setAllUserExpenses(response);
+				const renderData = getExpenseByDate(response, year, month);
+				setUserExpenses(renderData);
+			})
+			.then(() => setLoading(false));
+	}, []);
 
 	function openDeleteExpenseWindow(event: React.MouseEvent<SVGElement>) {
 		setDeleteExpenseId(event.currentTarget.dataset.id as string);

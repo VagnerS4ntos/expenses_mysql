@@ -3,12 +3,17 @@ import {
 	yearState,
 	monthState,
 	userExpensesData,
+	allExpenses,
 	editingExpense,
 } from 'globalState/recoilState';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { axiosInstance } from 'axios.config';
-import { InterfaceExpense, getUserExpenses } from '../../helpers/utils';
+import {
+	InterfaceExpense,
+	getExpenseByDate,
+	getAllUserExpenses,
+} from '../../helpers/utils';
 import { toast } from 'react-toastify';
 
 interface InterfaceNewExpense {
@@ -41,6 +46,7 @@ function EditExpense({
 	const [editExpenseWindow, setEditExpenseWindow] =
 		useRecoilState(editingExpense);
 	const [userExpenses, setUserExpenses] = useRecoilState(userExpensesData);
+	const [allUserExpenses, setAllUserExpenses] = useRecoilState(allExpenses);
 	const year = useRecoilValue(yearState);
 	const month = useRecoilValue(monthState);
 
@@ -60,9 +66,11 @@ function EditExpense({
 				editExpenseData,
 			);
 			if (response.status == 200) {
-				getUserExpenses(userId, year, month).then((data) =>
-					setUserExpenses(data),
-				);
+				getAllUserExpenses(userId).then((response) => {
+					setAllUserExpenses(response);
+					const renderData = getExpenseByDate(response, year, month);
+					setUserExpenses(renderData);
+				});
 				toast.success(response.data.message);
 				setEditExpenseWindow(false);
 			}

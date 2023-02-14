@@ -9,6 +9,7 @@ import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
 import { axiosInstance } from 'axios.config';
 import { v4 as uuid } from 'uuid';
 import { toast } from 'react-toastify';
+import { updateToast } from 'helpers/utils';
 const emailRegex =
 	/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -57,6 +58,7 @@ function Signup() {
 	const onSubmit: SubmitHandler<IFormInput> = async (userData) => {
 		const id = uuid();
 		const { name, email, password } = userData;
+		const toastLoading = toast.loading('Please wait...');
 		try {
 			const { data }: { data: { message: string; error: boolean } } =
 				await axiosInstance.post('user/signup', {
@@ -66,15 +68,16 @@ function Signup() {
 					password,
 				});
 			if (data.error) {
-				toast.error(data.message);
+				toast.update(toastLoading, updateToast(data.message, 'error'));
 			} else {
+				toast.dismiss(toastLoading);
 				router.push('/');
 			}
 		} catch (error: any) {
 			if (error instanceof Error) {
-				toast.error(error.message);
+				toast.update(toastLoading, updateToast(error.message, 'error'));
 			} else {
-				toast.error(error);
+				toast.update(toastLoading, updateToast(error, 'error'));
 			}
 		}
 	};

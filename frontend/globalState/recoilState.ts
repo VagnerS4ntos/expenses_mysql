@@ -19,6 +19,11 @@ export const userExpensesData = atom<InterfaceExpense[]>({
 	default: [],
 });
 
+export const allExpenses = atom<InterfaceExpense[]>({
+	key: 'allExpenses',
+	default: [],
+});
+
 export const deletingExpense = atom({
 	key: 'deletingExpense',
 	default: false,

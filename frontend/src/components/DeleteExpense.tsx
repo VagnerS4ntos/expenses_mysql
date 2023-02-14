@@ -4,9 +4,10 @@ import {
 	yearState,
 	monthState,
 	userExpensesData,
+	allExpenses,
 	deletingExpense,
 } from 'globalState/recoilState';
-import { getUserExpenses } from 'helpers/utils';
+import { getExpenseByDate, getAllUserExpenses } from 'helpers/utils';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { toast } from 'react-toastify';
 
@@ -22,6 +23,7 @@ function DeleteExpense({
 	const year = useRecoilValue(yearState);
 	const month = useRecoilValue(monthState);
 	const [userExpenses, setUserExpenses] = useRecoilState(userExpensesData);
+	const [allUserExpenses, setAllUserExpenses] = useRecoilState(allExpenses);
 
 	function closeThisWindow(event: React.MouseEvent<HTMLElement>) {
 		if ((event.target as HTMLElement).dataset.function === 'close') {
@@ -35,9 +37,11 @@ function DeleteExpense({
 				id: expenseId,
 			});
 			if (response.status == 200) {
-				getUserExpenses(userId, year, month).then((response) =>
-					setUserExpenses(response),
-				);
+				getAllUserExpenses(userId).then((response) => {
+					setAllUserExpenses(response);
+					const renderData = getExpenseByDate(response, year, month);
+					setUserExpenses(renderData);
+				});
 				toast.success(response.data.message);
 				setDeleteExpenseWindow(false);
 			}
