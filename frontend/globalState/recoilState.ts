@@ -38,3 +38,8 @@ export const email = atom({
 	key: 'email',
 	default: '',
 });
+
+export const userNameState = atom({
+	key: 'userName',
+	default: '',
+});

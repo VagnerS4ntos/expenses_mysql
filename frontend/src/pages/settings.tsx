@@ -1,16 +1,14 @@
 import React from 'react';
-import Header from '@/components/Header';
-import NewExpense from '@/components/NewExpense';
-import Balance from '@/components/BalanceSheet';
-import SelectDate from '@/components/SelectDate';
-import Expenses from '@/components/Expenses';
 import { GetServerSidePropsContext } from 'next';
 import jwt, { JwtPayload, Secret } from 'jsonwebtoken';
+import Header from '@/components/Header';
 import { userNameState } from 'globalState/recoilState';
 import { useRecoilState } from 'recoil';
+import ChangeUsername from '@/components/ChangeUserName';
 
-export default function Home({ id, name }: { id: string; name: string }) {
+function settings({ id, name }: { id: string; name: string }) {
 	const [userName, setUserName] = useRecoilState(userNameState);
+
 	React.useEffect(() => {
 		setUserName(name);
 	}, []);
@@ -18,15 +16,14 @@ export default function Home({ id, name }: { id: string; name: string }) {
 	return (
 		<>
 			<Header />
-			<main className="container">
-				<NewExpense userId={id} />
-				<Balance />
-				<SelectDate />
-				<Expenses userId={id} />
+			<main className="max-w-xl mx-auto">
+				<ChangeUsername userId={id} />
 			</main>
 		</>
 	);
 }
+
+export default settings;
 
 export const getServerSideProps = async (
 	context: GetServerSidePropsContext,

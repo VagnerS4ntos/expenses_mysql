@@ -6,9 +6,12 @@ import { RiSettings5Fill } from 'react-icons/ri';
 import { useRouter } from 'next/router';
 import { axiosInstance } from 'axios.config';
 import { toast } from 'react-toastify';
+import { userNameState } from 'globalState/recoilState';
+import { useRecoilValue } from 'recoil';
 
-function Header({ userName }: { userName: string }) {
+function Header() {
 	const router = useRouter();
+	const userName = useRecoilValue(userNameState);
 
 	async function signout() {
 		try {

@@ -9,9 +9,9 @@ const sequelize = new Sequelize(
 		dialect: 'mysql',
 		dialectModule: require('mysql2'),
 		dialectOptions: {
-			ssl: {
-				rejectUnauthorized: true,
-			},
+			// ssl: {
+			// 	rejectUnauthorized: true,
+			// },
 		},
 	},
 );
