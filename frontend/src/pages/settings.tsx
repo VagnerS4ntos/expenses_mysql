@@ -7,6 +7,7 @@ import { useRecoilState } from 'recoil';
 import ChangeUsername from '@/components/ChangeUserName';
 import ChangeEmail from '@/components/ChangeEmail';
 import ChangePassword from '@/components/ChangeUserPassword';
+import DeleteAccount from '@/components/DeleteAccount';
 
 function settings({ id, name }: { id: string; name: string }) {
 	const [userName, setUserName] = useRecoilState(userNameState);
@@ -22,6 +23,7 @@ function settings({ id, name }: { id: string; name: string }) {
 				<ChangeUsername userId={id} />
 				<ChangeEmail userId={id} />
 				<ChangePassword userId={id} />
+				<DeleteAccount userId={id} />
 			</main>
 		</>
 	);

@@ -11,7 +11,7 @@ export default async function handler(
 		const { id, password, newPassword } = req.body;
 		const user: IUsers = await Users.findOne({ where: { id } });
 
-		const passwordMatch = await bcrypt.compareSync(password, user.password);
+		const passwordMatch = bcrypt.compareSync(password, user.password);
 		if (passwordMatch) {
 			const salt = bcrypt.genSaltSync(10);
 			const hashedNewPassword = bcrypt.hashSync(newPassword, salt);
