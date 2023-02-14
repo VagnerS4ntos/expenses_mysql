@@ -49,7 +49,7 @@ function Expenses({ userId }: { userId: string }) {
 	}
 
 	if (loading) {
-		return <h1 className="text-2xl mt-5">Loading...</h1>;
+		return <h1 className="text-2xl mt-5 max-w-xl mx-auto">Loading...</h1>;
 	}
 
 	return (
@@ -120,7 +120,7 @@ function Expenses({ userId }: { userId: string }) {
 					</tbody>
 				</table>
 			) : (
-				<h1 className="mt-5">No data found</h1>
+				<h1 className="text-2xl mt-5">No data found</h1>
 			)}
 		</section>
 	);

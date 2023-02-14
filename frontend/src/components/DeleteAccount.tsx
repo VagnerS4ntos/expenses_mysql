@@ -98,7 +98,7 @@ function DeleteAccount({ userId }: { userId: string }) {
 				>
 					<div className="bg-white text-black rounded-md w-full sm:w-96 overflow-hidden">
 						<h1 className="bg-red-500 text-white uppercase p-4 flex items-center gap-2">
-							<HiExclamationTriangle className="inline-block" size="1.5rem" />
+							<HiExclamationTriangle className="inline-block" size={25} />
 							Delete account
 						</h1>
 						<div className="flex flex-col gap-4 p-4">
