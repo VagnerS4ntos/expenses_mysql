@@ -68,7 +68,7 @@ function NewExpense({ userId }: { userId: string }) {
 			</button>
 			{addExpense && (
 				<section
-					className="bg-black absolute w-screen h-screen top-0 left-0 grid place-items-center bg-opacity-80 px-4"
+					className="bg-black fixed w-screen h-screen top-0 left-0 grid place-items-center bg-opacity-80 px-4"
 					data-function="close"
 					onClick={closeThisWindow}
 				>
