@@ -9,8 +9,6 @@ export interface IUsers {
 	name: string;
 	email: string;
 	password: string;
-	createdAt: Date;
-	updatedAt: Date;
 }
 
 export default async function handler(

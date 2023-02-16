@@ -52,24 +52,6 @@ export function filterExpenseByDate(
 	return expensesFiltered;
 }
 
-// export async function getExpenseByDate(
-// 	id: string,
-// 	year: number,
-// 	month: string,
-// ) {
-// 	try {
-// 		const { data }: { data: InterfaceExpense[] } = await axiosInstance.get(
-// 			`expenses/getUserExpenses/${id}`,
-// 		);
-// 		const userData = data.sort(sortByName);
-// 		const userExpensesByDate = filterExpenseByDate(userData, year, month);
-// 		return userExpensesByDate;
-// 	} catch (error: any) {
-// 		console.log(error?.message);
-// 		return [];
-// 	}
-// }
-
 export function getExpenseByDate(
 	userData: InterfaceExpense[],
 	year: number,
@@ -117,6 +99,4 @@ export interface InterfaceExpense {
 	value: number;
 	date: string;
 	userId: string;
-	createdAt: Date;
-	updatedAt: Date;
 }

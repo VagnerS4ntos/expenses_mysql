@@ -1,7 +1,6 @@
 import React from 'react';
 import {
 	getExpenseByDate,
-	getAllUserExpenses,
 	getDayYearMonth,
 	InterfaceExpense,
 } from 'helpers/utils';
@@ -18,6 +17,11 @@ import { AiFillDelete, AiFillEdit } from 'react-icons/ai';
 import DeleteExpense from './DeleteExpense';
 import EditExpense from './EditExpense';
 
+/* */
+import useSWR from 'swr';
+import { axiosInstance } from 'axios.config';
+/* */
+
 function Expenses({ userId }: { userId: string }) {
 	const year = useRecoilValue(yearState);
 	const month = useRecoilValue(monthState);
@@ -33,6 +37,17 @@ function Expenses({ userId }: { userId: string }) {
 		React.useState<InterfaceExpense | null>(null);
 	const [firstRender, setFirstRender] = React.useState(true);
 
+	const { data, error, isLoading } = useSWR<InterfaceExpense[]>(
+		`expenses/getUserExpenses/${userId}`,
+		(url: string) =>
+			axiosInstance(url).then(({ data }: { data: InterfaceExpense[] }) => {
+				setAllUserExpenses(data);
+				const renderData = getExpenseByDate(data, year, month);
+				setUserExpenses(renderData);
+				return data;
+			}),
+	);
+
 	React.useEffect(() => {
 		if (!firstRender) {
 			const data = getExpenseByDate(allUserExpenses, year, month);
@@ -40,16 +55,6 @@ function Expenses({ userId }: { userId: string }) {
 		}
 		setFirstRender(false);
 	}, [year, month]);
-
-	React.useEffect(() => {
-		getAllUserExpenses(userId)
-			.then((response) => {
-				setAllUserExpenses(response);
-				const renderData = getExpenseByDate(response, year, month);
-				setUserExpenses(renderData);
-			})
-			.then(() => setLoading(false));
-	}, []);
 
 	function openDeleteExpenseWindow(event: React.MouseEvent<SVGElement>) {
 		setDeleteExpenseId(event.currentTarget.dataset.id as string);
@@ -64,7 +69,7 @@ function Expenses({ userId }: { userId: string }) {
 		setEditExpenseWindow(true);
 	}
 
-	if (loading) {
+	if (isLoading) {
 		return <h1 className="text-2xl mt-5 max-w-xl mx-auto">Loading...</h1>;
 	}
 
