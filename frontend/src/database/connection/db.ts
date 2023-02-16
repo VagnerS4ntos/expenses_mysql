@@ -14,7 +14,7 @@ const sequelize = new Sequelize(
 			process.env.SERVER_ENV !== 'development'
 				? {
 						ssl: {
-							rejectUnauthorized: false,
+							rejectUnauthorized: true,
 						},
 				  }
 				: {},
