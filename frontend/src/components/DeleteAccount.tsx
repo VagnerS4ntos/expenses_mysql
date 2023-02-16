@@ -86,7 +86,7 @@ function DeleteAccount({ userId }: { userId: string }) {
 				</p>
 
 				<button className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-md mt-4 uppercase w-full">
-					Save
+					Delete
 				</button>
 			</form>
 
