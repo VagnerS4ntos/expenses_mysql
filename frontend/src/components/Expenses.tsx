@@ -2,6 +2,7 @@ import React from 'react';
 import {
 	getExpenseByDate,
 	getDayYearMonth,
+	sortByName,
 	InterfaceExpense,
 } from 'helpers/utils';
 import { useRecoilValue, useRecoilState } from 'recoil';
@@ -27,7 +28,6 @@ function Expenses({ userId }: { userId: string }) {
 	const month = useRecoilValue(monthState);
 	const [userExpenses, setUserExpenses] = useRecoilState(userExpensesData);
 	const [allUserExpenses, setAllUserExpenses] = useRecoilState(allExpenses);
-	const [loading, setLoading] = React.useState(true);
 	const [deleteExpenseWindow, setDeleteExpenseWindow] =
 		useRecoilState(deletingExpense);
 	const [editExpenseWindow, setEditExpenseWindow] =
@@ -37,14 +37,15 @@ function Expenses({ userId }: { userId: string }) {
 		React.useState<InterfaceExpense | null>(null);
 	const [firstRender, setFirstRender] = React.useState(true);
 
-	const { data, error, isLoading } = useSWR<InterfaceExpense[]>(
+	const { error, isLoading } = useSWR<InterfaceExpense[]>(
 		`expenses/getUserExpenses/${userId}`,
 		(url: string) =>
 			axiosInstance(url).then(({ data }: { data: InterfaceExpense[] }) => {
-				setAllUserExpenses(data);
+				const sortedByName = data.sort(sortByName);
+				setAllUserExpenses(sortedByName);
 				const renderData = getExpenseByDate(data, year, month);
 				setUserExpenses(renderData);
-				return data;
+				return sortedByName;
 			}),
 	);
 
@@ -67,6 +68,12 @@ function Expenses({ userId }: { userId: string }) {
 		);
 		setEditExpenseData(currentExpense);
 		setEditExpenseWindow(true);
+	}
+
+	if (error) {
+		return (
+			<h1 className="text-2xl mt-5 max-w-xl mx-auto">Something is wrong...</h1>
+		);
 	}
 
 	if (isLoading) {
