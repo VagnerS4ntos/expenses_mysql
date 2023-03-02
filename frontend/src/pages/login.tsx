@@ -40,6 +40,8 @@ export const InputData = ({ label, type, register }: InputProps) => (
 );
 
 function Login() {
+	const [loading, setLoading] = React.useState(false);
+
 	const {
 		register,
 		handleSubmit,
@@ -48,6 +50,8 @@ function Login() {
 	const router = useRouter();
 
 	const onSubmit: SubmitHandler<IFormInput> = async (loginData) => {
+		console.log('ENVIANDO');
+		setLoading(true);
 		const { email, password } = loginData;
 		const toastLoading = toast.loading('Please wait...');
 		try {
@@ -68,6 +72,8 @@ function Login() {
 			} else {
 				toast.update(toastLoading, updateToast(error, 'error'));
 			}
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -88,6 +94,7 @@ function Login() {
 				<button
 					className="bg-green-500 hover:bg-green-600 active:bg-green-700 text-white p-2 mt-8 mb-2 rounded-lg  w-full font-semibold"
 					type="submit"
+					disabled={loading}
 				>
 					Login
 				</button>

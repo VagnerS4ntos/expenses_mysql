@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 
 function NewExpense({ userId }: { userId: string }) {
 	const [addExpense, setAddExpense] = React.useState(false);
+	const [loading, setLoading] = React.useState(false);
 	const year = useRecoilValue(yearState);
 	const month = useRecoilValue(monthState);
 	const [userExpenses, setUserExpenses] = useRecoilState(userExpensesData);
@@ -33,6 +34,7 @@ function NewExpense({ userId }: { userId: string }) {
 	}
 
 	const onSubmit: SubmitHandler<INewExpense> = async (newExpenseData) => {
+		setLoading(true);
 		newExpenseData.userId = userId;
 		try {
 			const response = await axiosInstance.post(
@@ -55,6 +57,8 @@ function NewExpense({ userId }: { userId: string }) {
 			} else {
 				toast.error(error);
 			}
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -132,7 +136,10 @@ function NewExpense({ userId }: { userId: string }) {
 								)}
 							</div>
 							<div className="flex gap-2 mt-2">
-								<button className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded-md grow">
+								<button
+									className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded-md grow"
+									disabled={loading}
+								>
 									Save
 								</button>
 								<button

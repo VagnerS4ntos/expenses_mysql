@@ -49,6 +49,7 @@ function EditExpense({
 	const [allUserExpenses, setAllUserExpenses] = useRecoilState(allExpenses);
 	const year = useRecoilValue(yearState);
 	const month = useRecoilValue(monthState);
+	const [loading, setLoading] = React.useState(false);
 
 	function closeThisWindow(event: React.MouseEvent<HTMLElement>) {
 		if ((event.target as HTMLElement).dataset.function === 'close') {
@@ -59,6 +60,7 @@ function EditExpense({
 	const onSubmit: SubmitHandler<InterfaceNewExpense> = async (
 		editExpenseData,
 	) => {
+		setLoading(true);
 		editExpenseData.expenseId = expenseData!.id;
 		try {
 			const response = await axiosInstance.post(
@@ -80,6 +82,8 @@ function EditExpense({
 			} else {
 				toast.error(error);
 			}
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -148,7 +152,10 @@ function EditExpense({
 						)}
 					</div>
 					<div className="flex gap-2 mt-2">
-						<button className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded-md grow">
+						<button
+							className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded-md grow"
+							disabled={loading}
+						>
 							Save
 						</button>
 						<button

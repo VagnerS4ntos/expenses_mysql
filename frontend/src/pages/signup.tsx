@@ -52,10 +52,11 @@ function Signup() {
 		formState: { errors },
 		watch,
 	} = useForm<IFormInput>();
-
+	const [loading, setLoading] = React.useState(false);
 	const router = useRouter();
 
 	const onSubmit: SubmitHandler<IFormInput> = async (userData) => {
+		setLoading(true);
 		const id = uuid();
 		const { name, email, password } = userData;
 		const toastLoading = toast.loading('Please wait...');
@@ -79,6 +80,8 @@ function Signup() {
 			} else {
 				toast.update(toastLoading, updateToast(error, 'error'));
 			}
+		} finally {
+			setLoading(false);
 		}
 	};
 
@@ -141,7 +144,10 @@ function Signup() {
 					<p className="text-red-500 mt-1">Passwords must be the same</p>
 				)}
 
-				<button className="bg-green-500 hover:bg-green-600 active:bg-green-700 text-white p-2 mt-8 mb-2 rounded-lg w-full font-semibold">
+				<button
+					className="bg-green-500 hover:bg-green-600 active:bg-green-700 text-white p-2 mt-8 mb-2 rounded-lg w-full font-semibold"
+					disabled={loading}
+				>
 					Signup
 				</button>
 				<Link href="login" className="hover:text-green-600 font-semibold">
